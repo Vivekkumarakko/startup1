@@ -177,4 +177,4 @@ For questions or issues with the chatbot integration, please:
 
 ---
 
-**Note**: This chatbot currently uses simulated responses. For production use, integrate with a real AI service for more sophisticated responses. 
+**Note**: This chatbot currently uses simulated responses. For production use, integrate with a real AI service for more sophisticated responses. "# startup" 
