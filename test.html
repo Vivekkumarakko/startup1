@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Chatbot Integration Test</h1>
+        
+        <div id="status" class="status info">
+            Testing chatbot setup...
+        </div>
+
+        <h2>Test Results:</h2>
+        <div id="results"></div>
+
+        <h2>Manual Tests:</h2>
+        <button onclick="testAPI()">Test Gemini API</button>
+        <button onclick="testConfig()">Test Configuration</button>
+        <button onclick="openApp()">Open Main App</button>
+
+        <h2>Instructions:</h2>
+        <ol>
+            <li>Click "Test Configuration" to verify your API key is set up correctly</li>
+            <li>Click "Test Gemini API" to test the API connection</li>
+            <li>Click "Open Main App" to open the full application with chatbot</li>
+            <li>Look for the chat button in the bottom-right corner of the main app</li>
+        </ol>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyA5Qak-w3LO0KhuowCllj6dJgF-17N4joI';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        function testConfig() {
+            addResult('Testing configuration...', 'info');
+            
+            if (API_KEY && API_KEY.length > 10) {
+                addResult('✅ API Key is configured', 'success');
+            } else {
+                addResult('❌ API Key is missing or invalid', 'error');
+            }
+
+            if (API_URL) {
+                addResult('✅ API URL is configured', 'success');
+            } else {
+                addResult('❌ API URL is missing', 'error');
+            }
+        }
+
+        async function testAPI() {
+            addResult('Testing Gemini API connection...', 'info');
+            
+            try {
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: 'Hello, please respond with a simple greeting.'
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 100,
+                        }
+                    }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.candidates && data.candidates[0]) {
+                        const text = data.candidates[0].content.parts[0].text;
+                        addResult(`✅ API Test Success: "${text}"`, 'success');
+                    } else {
+                        addResult('⚠️ API responded but no content found', 'error');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    addResult(`❌ API Test Failed: ${response.status} - ${errorText}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ API Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        function openApp() {
+            window.open('http://localhost:5173', '_blank');
+        }
+
+        // Auto-run config test on page load
+        window.onload = function() {
+            updateStatus('Ready for testing!', 'success');
+            testConfig();
+        };
+    </script>
+</body>
+</html> 
