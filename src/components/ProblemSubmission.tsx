@@ -46,7 +46,7 @@ const ProblemSubmission: React.FC<ProblemSubmissionProps> = ({ isOpen, onClose, 
     { id: 'expert', name: 'Expert', description: 'Specialized knowledge needed' }
   ];
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -162,9 +162,10 @@ const ProblemSubmission: React.FC<ProblemSubmissionProps> = ({ isOpen, onClose, 
         if (onSuccess) onSuccess();
       }, 2000);
 
-    } catch (error: any) {
-      setError(error.message || 'Failed to create problem');
-      trackEvents.error('problem_creation_error', error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create problem';
+      setError(errorMessage);
+      trackEvents.error('problem_creation_error', errorMessage);
     } finally {
       setLoading(false);
     }

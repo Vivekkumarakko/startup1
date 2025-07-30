@@ -68,8 +68,9 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
       setError('');
       setLoading(true);
       await signup(formData.email, formData.password, formData.displayName);
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Signup failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -80,8 +81,9 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
       setError('');
       setLoading(true);
       await loginWithGoogle();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Google signup failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -92,8 +94,9 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
       setError('');
       setLoading(true);
       await loginWithFacebook();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Facebook signup failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

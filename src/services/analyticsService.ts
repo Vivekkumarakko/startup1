@@ -103,7 +103,7 @@ export class AnalyticsService {
   }
 
   // Track custom events
-  trackCustomEvent(eventName: string, parameters?: { [key: string]: any }) {
+  trackCustomEvent(eventName: string, parameters?: { [key: string]: string | number | boolean }) {
     logEvent(this.analytics, eventName, parameters);
   }
 }
@@ -146,6 +146,6 @@ export const trackEvents = {
     analyticsService.trackError(errorType, errorMessage),
 
   // Custom events
-  custom: (eventName: string, parameters?: { [key: string]: any }) => 
+  custom: (eventName: string, parameters?: { [key: string]: string | number | boolean }) => 
     analyticsService.trackCustomEvent(eventName, parameters)
 }; 

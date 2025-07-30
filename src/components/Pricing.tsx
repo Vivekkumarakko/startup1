@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Check, Star, Zap, Users, BarChart3, Shield, Headphones, Crown } from 'lucide-react';
+import { Check, Star, Zap, Crown } from 'lucide-react';
+
+interface Plan {
+  name: string;
+  price: { monthly: number; annual: number };
+  description: string;
+  features: string[];
+  limitations: string[];
+  cta: string;
+  popular: boolean;
+  icon: React.ComponentType<{ className?: string }>;
+}
 
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -156,11 +167,11 @@ const Pricing = () => {
     }
   ];
 
-  const getPrice = (plan: any) => {
+  const getPrice = (plan: Plan) => {
     return isAnnual ? plan.price.annual : plan.price.monthly;
   };
 
-  const getSavings = (plan: any) => {
+  const getSavings = (plan: Plan) => {
     if (plan.price.monthly === 0) return 0;
     return (plan.price.monthly * 12) - plan.price.annual;
   };
@@ -207,7 +218,7 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {plans.map((plan, index) => {
+          {plans.map((plan) => {
             const IconComponent = plan.icon;
             const price = getPrice(plan);
             const savings = getSavings(plan);

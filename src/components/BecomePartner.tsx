@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Handshake, Users, Target, Award, TrendingUp, Shield, CheckCircle, ArrowRight, Mail, Building, User, MessageSquare } from 'lucide-react';
+import { Handshake, Users, Target, Award, TrendingUp, CheckCircle, ArrowRight, Mail, Building, User, MessageSquare } from 'lucide-react';
 
 const BecomePartner = () => {
   const [formData, setFormData] = useState({
@@ -134,7 +134,7 @@ const BecomePartner = () => {
             Partner Advantages
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => {
+            {benefits.map((benefit) => {
               const IconComponent = benefit.icon;
               return (
                 <div
@@ -211,8 +211,8 @@ const BecomePartner = () => {
           
           {/* Partner Logos */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
-            {partnerLogos.map((partner, index) => (
-              <div key={index} className="text-center group">
+            {partnerLogos.map((partner) => (
+              <div key={partner.name} className="text-center group">
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">
                   {partner.logo}
                 </div>
@@ -224,8 +224,8 @@ const BecomePartner = () => {
 
           {/* Testimonials */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {partnerTestimonials.map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 rounded-2xl p-6">
+            {partnerTestimonials.map((testimonial) => (
+              <div key={testimonial.name} className="bg-gray-50 rounded-2xl p-6">
                 <div className="flex items-start space-x-4">
                   <div className="text-3xl">{testimonial.avatar}</div>
                   <div>

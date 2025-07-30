@@ -14,15 +14,10 @@ import Pricing from './components/Pricing';
 import BecomePartner from './components/BecomePartner';
 import Chatbot from './components/Chatbot';
 import { ChatbotProvider } from './components/ChatbotContext';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Authentication from './components/auth/Authentication';
-import UserProfile from './components/auth/UserProfile';
+import { AuthProvider } from './contexts/AuthContext';
 import AuthTest from './components/auth/AuthTest';
-import ErrorBoundary from './components/ErrorBoundary';
 
 const AppContent: React.FC = () => {
-  const { currentUser } = useAuth();
-  
   // Check if we're on the auth test route
   const isAuthTestRoute = window.location.pathname === '/auth-test';
 

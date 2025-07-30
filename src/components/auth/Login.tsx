@@ -27,8 +27,9 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onForgotPassword }) => 
       setError('');
       setLoading(true);
       await login(email, password);
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -39,8 +40,9 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onForgotPassword }) => 
       setError('');
       setLoading(true);
       await loginWithGoogle();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Google login failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,8 +53,9 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onForgotPassword }) => 
       setError('');
       setLoading(true);
       await loginWithFacebook();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Facebook login failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

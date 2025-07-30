@@ -4,6 +4,22 @@ import { useAuth } from '../contexts/AuthContext';
 import { problemService } from '../services/firestoreService';
 import { trackEvents } from '../services/analyticsService';
 import ProblemSubmission from './ProblemSubmission';
+import { Timestamp } from 'firebase/firestore';
+
+interface Problem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  reward: number;
+  deadline: Timestamp;
+  tags: string[];
+  submissions: number;
+  views: number;
+  createdAt: Timestamp;
+  userId: string;
+}
 
 const ProblemBoard = () => {
   const { currentUser } = useAuth();
@@ -12,10 +28,10 @@ const ProblemBoard = () => {
   const [selectedDeadline, setSelectedDeadline] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [selectedProblem, setSelectedProblem] = useState<any>(null);
+  const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showProblemSubmission, setShowProblemSubmission] = useState(false);
-  const [problems, setProblems] = useState<any[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const categories = [
@@ -106,7 +122,7 @@ const ProblemBoard = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const formatDeadline = (deadline: any) => {
+  const formatDeadline = (deadline: Timestamp) => {
     if (!deadline) return 'No deadline';
     
     const date = deadline.toDate ? deadline.toDate() : new Date(deadline);
@@ -120,11 +136,7 @@ const ProblemBoard = () => {
     return `${diffDays} days left`;
   };
 
-  const formatDate = (date: any) => {
-    if (!date) return 'Unknown';
-    const dateObj = date.toDate ? date.toDate() : new Date(date);
-    return dateObj.toLocaleDateString();
-  };
+
 
   return (
     <section id="problems" className="py-16 lg:py-24 bg-gray-50 min-h-screen">

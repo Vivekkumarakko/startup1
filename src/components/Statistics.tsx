@@ -6,7 +6,7 @@ const Statistics = () => {
   const [counts, setCounts] = useState({ tokens: 0, problems: 0, solvers: 0, recruiters: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const stats = [
+  const stats = React.useMemo(() => [
     {
       icon: Coins,
       value: 5000,
@@ -35,7 +35,7 @@ const Statistics = () => {
       label: 'Recruiters Onboarded',
       color: 'bg-purple-500'
     }
-  ];
+  ], []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

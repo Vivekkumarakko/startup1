@@ -6,8 +6,6 @@ import {
   signOut, 
   onAuthStateChanged,
   signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
   sendPasswordResetEmail,
   updateProfile
 } from 'firebase/auth';
@@ -57,10 +55,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         display_name: displayName || '',
         signup_method: 'email'
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('signup_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Signup failed';
+      trackEvents.error('signup_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
@@ -75,10 +74,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         display_name: result.user.displayName || '',
         login_method: 'email'
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('login_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      trackEvents.error('login_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
@@ -90,10 +90,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       trackEvents.custom('logout', {
         user_id: currentUser?.uid
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('logout_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Logout failed';
+      trackEvents.error('logout_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
@@ -108,10 +109,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         display_name: result.user.displayName || '',
         login_method: 'google'
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('google_login_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Google login failed';
+      trackEvents.error('google_login_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
@@ -126,10 +128,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         display_name: result.user.displayName || '',
         login_method: 'facebook'
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('facebook_login_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Facebook login failed';
+      trackEvents.error('facebook_login_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
@@ -141,10 +144,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       trackEvents.custom('password_reset_requested', {
         email: email
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Track error
-      trackEvents.error('password_reset_error', error.message);
-      throw new Error(error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Password reset failed';
+      trackEvents.error('password_reset_error', errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
