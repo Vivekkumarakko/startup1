@@ -1,0 +1,46 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chain Link / Loop - Main element -->
+  <path 
+    d="M16 4C10.477 4 6 8.477 6 14C6 19.523 10.477 24 16 24C21.523 24 26 19.523 26 14C26 8.477 21.523 4 16 4ZM16 20C11.582 20 8 16.418 8 12C8 7.582 11.582 4 16 4C20.418 4 24 7.582 24 12C24 16.418 20.418 20 16 20Z" 
+    fill="#002D62"
+  />
+  
+  <!-- Lightbulb - Top left -->
+  <path 
+    d="M10 8C10 6.895 9.105 6 8 6C6.895 6 6 6.895 6 8C6 9.105 6.895 10 8 10C9.105 10 10 9.105 10 8Z" 
+    fill="#002D62"
+  />
+  <path 
+    d="M8 10C8 10 7.5 11 7.5 12C7.5 13 8 14 8 14" 
+    stroke="#002D62" 
+    strokeWidth="1" 
+    strokeLinecap="round"
+  />
+  
+  <!-- Puzzle Piece - Top right -->
+  <path 
+    d="M24 8C24 6.895 23.105 6 22 6C20.895 6 20 6.895 20 8C20 9.105 20.895 10 22 10C23.105 10 24 9.105 24 8Z" 
+    fill="#002D62"
+  />
+  <path 
+    d="M22 10C22 10 22.5 11 22.5 12C22.5 13 22 14 22 14" 
+    stroke="#002D62" 
+    strokeWidth="1" 
+    strokeLinecap="round"
+  />
+  
+  <!-- Dollar Sign Coin - Bottom right, overlapping -->
+  <circle 
+    cx="20" 
+    cy="20" 
+    r="5" 
+    fill="#DAA520"
+  />
+  <path 
+    d="M20 16V24M17 19H23M17 21H23" 
+    stroke="white" 
+    strokeWidth="1.5" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  />
+</svg> 

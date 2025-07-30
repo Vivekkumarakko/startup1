@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, RotateCcw } from 'lucide-react';
 import { useChatbot, Message } from './ChatbotContext';
-import { sendMessageToGemini } from '../services/geminiService';
-import { getQuickReplies } from '../utils/chatbotResponses';
+import { generateBotResponse, getQuickReplies } from '../utils/chatbotResponses';
 import LoadingSpinner from './LoadingSpinner';
 
 const Chatbot: React.FC = () => {
@@ -41,14 +40,8 @@ const Chatbot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Get conversation history for context
-      const conversationHistory = messages
-        .filter((msg: Message) => msg.sender === 'user')
-        .map((msg: Message) => msg.text)
-        .slice(-3);
-
-      // Call Gemini API
-      const response = await sendMessageToGemini(inputValue, conversationHistory);
+      // Use local enhanced responses
+      const response = generateBotResponse(inputValue);
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -59,12 +52,12 @@ const Chatbot: React.FC = () => {
       
       addMessage(botMessage);
     } catch (error) {
-      console.error('Error getting AI response:', error);
+      console.error('Error generating response:', error);
       
       // Fallback response
       const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'I apologize, but I\'m having trouble connecting right now. Please try again in a moment or contact our support team.',
+        text: 'I apologize, but I\'m having trouble processing your request right now. Please try again in a moment.',
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -87,14 +80,8 @@ const Chatbot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Get conversation history for context
-      const conversationHistory = messages
-        .filter((msg: Message) => msg.sender === 'user')
-        .map((msg: Message) => msg.text)
-        .slice(-3);
-
-      // Call Gemini API
-      const response = await sendMessageToGemini(reply, conversationHistory);
+      // Use local enhanced responses
+      const response = generateBotResponse(reply);
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -105,12 +92,12 @@ const Chatbot: React.FC = () => {
       
       addMessage(botMessage);
     } catch (error) {
-      console.error('Error getting AI response:', error);
+      console.error('Error generating response:', error);
       
       // Fallback response
       const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'I apologize, but I\'m having trouble connecting right now. Please try again in a moment or contact our support team.',
+        text: 'I apologize, but I\'m having trouble processing your request right now. Please try again in a moment.',
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -146,7 +133,7 @@ const Chatbot: React.FC = () => {
           <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Bot size={20} />
-              <span className="font-semibold">AI Assistant</span>
+              <span className="font-semibold">Problinx Assistant</span>
             </div>
             <div className="flex items-center space-x-2">
               <button
@@ -167,6 +154,22 @@ const Chatbot: React.FC = () => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.length === 0 && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 text-gray-800 rounded-lg px-4 py-2">
+                  <div className="flex items-center space-x-2">
+                    <Bot size={16} />
+                    <div>
+                      <p className="text-sm">Hello! Welcome to Problinx! 👋</p>
+                      <p className="text-xs opacity-70 mt-1">
+                        I can help you find projects, understand how our platform works, or answer any questions about solving real-world problems and earning tokens.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -184,7 +187,7 @@ const Chatbot: React.FC = () => {
                       <Bot size={16} className="mt-1 flex-shrink-0" />
                     )}
                     <div>
-                      <p className="text-sm">{message.text}</p>
+                      <p className="text-sm whitespace-pre-line">{message.text}</p>
                       <p className="text-xs opacity-70 mt-1">
                         {message.timestamp.toLocaleTimeString([], {
                           hour: '2-digit',
@@ -206,8 +209,8 @@ const Chatbot: React.FC = () => {
                 <div className="bg-gray-100 text-gray-800 rounded-lg px-4 py-2">
                   <div className="flex items-center space-x-2">
                     <Bot size={16} />
-                    <LoadingSpinner size="small" />
-                    <span className="text-sm">AI is thinking...</span>
+                    <LoadingSpinner size="sm" />
+                    <span className="text-sm">Thinking...</span>
                   </div>
                 </div>
               </div>
@@ -239,7 +242,7 @@ const Chatbot: React.FC = () => {
             </div>
             
             {/* Quick Replies */}
-            {messages.length === 1 && (
+            {messages.length <= 1 && (
               <div className="mt-3 space-y-2">
                 <p className="text-xs text-gray-500">Quick replies:</p>
                 <div className="flex flex-wrap gap-2">

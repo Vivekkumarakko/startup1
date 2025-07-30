@@ -6,27 +6,70 @@ import {
 } from 'firebase/analytics';
 import { analytics } from '../config/firebase';
 
-// Analytics service for tracking user events
+// Analytics service for tracking user events with error handling
 export class AnalyticsService {
   private analytics: Analytics;
+  private isEnabled: boolean = true;
+  private fallbackEvents: Array<{event: string, params: any}> = [];
 
   constructor() {
     this.analytics = analytics;
+    this.checkAnalyticsAvailability();
+  }
+
+  private checkAnalyticsAvailability() {
+    try {
+      // Check if analytics is properly initialized
+      if (!this.analytics) {
+        console.warn('Analytics not available - running in fallback mode');
+        this.isEnabled = false;
+      }
+    } catch (error) {
+      console.warn('Analytics initialization failed:', error);
+      this.isEnabled = false;
+    }
+  }
+
+  private safeLogEvent(eventName: string, parameters?: any) {
+    if (!this.isEnabled) {
+      // Store events for later if analytics becomes available
+      this.fallbackEvents.push({ event: eventName, params: parameters });
+      return;
+    }
+
+    try {
+      logEvent(this.analytics, eventName, parameters);
+    } catch (error) {
+      console.warn(`Analytics event failed: ${eventName}`, error);
+      // Don't break the app if analytics fails
+    }
   }
 
   // Set user ID for tracking
   setUserId(userId: string) {
-    setUserId(this.analytics, userId);
+    if (!this.isEnabled) return;
+    
+    try {
+      setUserId(this.analytics, userId);
+    } catch (error) {
+      console.warn('Failed to set user ID:', error);
+    }
   }
 
   // Set user properties
   setUserProperties(properties: { [key: string]: string }) {
-    setUserProperties(this.analytics, properties);
+    if (!this.isEnabled) return;
+    
+    try {
+      setUserProperties(this.analytics, properties);
+    } catch (error) {
+      console.warn('Failed to set user properties:', error);
+    }
   }
 
   // Track page views
   trackPageView(pageName: string, pageTitle?: string) {
-    logEvent(this.analytics, 'page_view', {
+    this.safeLogEvent('page_view', {
       page_name: pageName,
       page_title: pageTitle || pageName
     });
@@ -34,21 +77,21 @@ export class AnalyticsService {
 
   // Track user registration
   trackSignUp(method: string) {
-    logEvent(this.analytics, 'sign_up', {
+    this.safeLogEvent('sign_up', {
       method: method // 'email', 'google', 'facebook'
     });
   }
 
   // Track user login
   trackLogin(method: string) {
-    logEvent(this.analytics, 'login', {
+    this.safeLogEvent('login', {
       method: method
     });
   }
 
   // Track problem creation
   trackProblemCreated(category: string, difficulty: string) {
-    logEvent(this.analytics, 'problem_created', {
+    this.safeLogEvent('problem_created', {
       category: category,
       difficulty: difficulty
     });
@@ -56,7 +99,7 @@ export class AnalyticsService {
 
   // Track solution submission
   trackSolutionSubmitted(problemCategory: string, hasPrice: boolean) {
-    logEvent(this.analytics, 'solution_submitted', {
+    this.safeLogEvent('solution_submitted', {
       problem_category: problemCategory,
       has_price: hasPrice
     });
@@ -64,31 +107,31 @@ export class AnalyticsService {
 
   // Track partner application
   trackPartnerApplication() {
-    logEvent(this.analytics, 'partner_application_submitted');
+    this.safeLogEvent('partner_application_submitted');
   }
 
   // Track chatbot usage
   trackChatbotMessage(messageType: string) {
-    logEvent(this.analytics, 'chatbot_message', {
+    this.safeLogEvent('chatbot_message', {
       message_type: messageType // 'user_message', 'bot_response'
     });
   }
 
   // Track pricing page view
   trackPricingPageView() {
-    logEvent(this.analytics, 'pricing_page_view');
+    this.safeLogEvent('pricing_page_view');
   }
 
   // Track feature usage
   trackFeatureUsage(featureName: string) {
-    logEvent(this.analytics, 'feature_usage', {
+    this.safeLogEvent('feature_usage', {
       feature_name: featureName
     });
   }
 
   // Track search events
   trackSearch(searchTerm: string, category?: string) {
-    logEvent(this.analytics, 'search', {
+    this.safeLogEvent('search', {
       search_term: searchTerm,
       category: category
     });
@@ -96,7 +139,7 @@ export class AnalyticsService {
 
   // Track error events
   trackError(errorType: string, errorMessage: string) {
-    logEvent(this.analytics, 'error', {
+    this.safeLogEvent('error', {
       error_type: errorType,
       error_message: errorMessage
     });
@@ -104,7 +147,26 @@ export class AnalyticsService {
 
   // Track custom events
   trackCustomEvent(eventName: string, parameters?: { [key: string]: string | number | boolean }) {
-    logEvent(this.analytics, eventName, parameters);
+    this.safeLogEvent(eventName, parameters);
+  }
+
+  // Retry failed events when analytics becomes available
+  retryFailedEvents() {
+    if (this.fallbackEvents.length > 0 && this.isEnabled) {
+      console.log(`Retrying ${this.fallbackEvents.length} failed analytics events`);
+      this.fallbackEvents.forEach(({ event, params }) => {
+        this.safeLogEvent(event, params);
+      });
+      this.fallbackEvents = [];
+    }
+  }
+
+  // Enable/disable analytics
+  setEnabled(enabled: boolean) {
+    this.isEnabled = enabled;
+    if (enabled) {
+      this.retryFailedEvents();
+    }
   }
 }
 

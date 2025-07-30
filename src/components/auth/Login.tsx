@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import ProblinxLogo from '../ProblinxLogo';
 
 interface LoginProps {
   onSwitchToSignup: () => void;
@@ -63,11 +64,12 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onForgotPassword }) => 
 
   return (
     <div className="w-full space-y-6">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <div className="text-center">
+          <ProblinxLogo size="xl" variant="dark" className="mb-6" />
+          <h2 className="text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600">
             Or{' '}
             <button
               onClick={onSwitchToSignup}

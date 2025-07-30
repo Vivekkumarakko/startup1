@@ -1,3 +1,89 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* CSS Reset and Isolation */
+* {
+  box-sizing: border-box;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent logo overlap and ensure proper rendering */
+.problinx-logo-container {
+  isolation: isolate;
+  contain: layout style paint;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure proper logo rendering */
+.problinx-logo-container img {
+  isolation: isolate;
+  contain: layout style paint;
+  position: relative;
+  z-index: 1;
+}
+
+/* Remove any potential conflicting styles */
+.problinx-logo-container * {
+  isolation: isolate;
+}
+
+/* Navigation logo specific styles */
+nav .problinx-logo-container {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+/* Clear any potential duplicate elements */
+.problinx-logo-container::before,
+.problinx-logo-container::after {
+  content: none;
+}
+
+/* Navigation link hover effects */
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #DAA520;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Base styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

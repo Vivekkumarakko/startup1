@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check, Star, Zap, Crown } from 'lucide-react';
+import { Check, Star, Users, Crown } from 'lucide-react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 interface Plan {
   name: string;
@@ -14,6 +15,10 @@ interface Plan {
 
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
+
+  const handleGetStarted = () => {
+    smoothScrollTo('problems', 80);
+  };
 
   const plans = [
     {
@@ -35,7 +40,7 @@ const Pricing = () => {
       ],
       cta: 'Get Started',
       popular: false,
-      icon: Zap
+      icon: Users
     },
     {
       name: 'Pro',
@@ -423,7 +428,10 @@ const Pricing = () => {
           <p className="text-gray-600 mb-8">
             Join thousands of problem-solvers building their careers on Problinx
           </p>
-          <button className="px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <button 
+            onClick={handleGetStarted}
+            className="px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
             Get Started Today
           </button>
         </div>

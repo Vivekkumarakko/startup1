@@ -1,5 +1,6 @@
 import React from 'react';
-import { Zap, Mail, MessageCircle, Instagram, Linkedin } from 'lucide-react';
+import { Mail, MessageCircle, Instagram, Linkedin } from 'lucide-react';
+import ProblinxLogo from './ProblinxLogo';
 
 const Footer = () => {
   const footerLinks = {
@@ -43,12 +44,12 @@ const Footer = () => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Brand Section */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <Zap className="h-8 w-8 text-[#DAA520]" />
-                  <div className="absolute inset-0 h-8 w-8 bg-[#DAA520] opacity-20 rounded-full blur-sm"></div>
-                </div>
-                <span className="text-2xl font-bold">Problinx</span>
+              <div className="flex items-center">
+                <ProblinxLogo 
+                  size="xl"
+                  variant="white"
+                  className="mb-4"
+                />
               </div>
               
               <p className="text-gray-300 text-lg leading-relaxed max-w-md">

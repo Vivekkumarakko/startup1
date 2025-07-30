@@ -1,22 +1,37 @@
 import React from 'react';
+import ProblinxLogo from './ProblinxLogo';
 
 interface LoadingSpinnerProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  text?: string;
   className?: string;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'medium', 
-  className = '' 
+  size = 'md', 
+  text = 'Loading...',
+  className = ''
 }) => {
   const sizeClasses = {
-    small: 'w-4 h-4',
-    medium: 'w-6 h-6',
-    large: 'w-8 h-8'
+    sm: 'w-6 h-6',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12',
+    xl: 'w-16 h-16'
   };
 
   return (
-    <div className={`animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 ${sizeClasses[size]} ${className}`}>
+    <div className={`flex flex-col items-center justify-center space-y-4 ${className}`}>
+      <div className="relative">
+        <ProblinxLogo 
+          size={size} 
+          animated={true} 
+          className="animate-pulse"
+        />
+        <div className={`absolute inset-0 ${sizeClasses[size]} border-2 border-transparent border-t-[#DAA520] rounded-full animate-spin`}></div>
+      </div>
+      {text && (
+        <p className="text-gray-600 font-medium animate-pulse">{text}</p>
+      )}
     </div>
   );
 };

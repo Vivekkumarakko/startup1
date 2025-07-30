@@ -30,14 +30,7 @@ interface ChatbotProviderProps {
 }
 
 export const ChatbotProvider: React.FC<ChatbotProviderProps> = ({ children }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: 'Hello! I\'m here to help you. How can I assist you today?',
-      sender: 'bot',
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
 
   const addMessage = (message: Message) => {
@@ -45,14 +38,7 @@ export const ChatbotProvider: React.FC<ChatbotProviderProps> = ({ children }) =>
   };
 
   const clearMessages = () => {
-    setMessages([
-      {
-        id: Date.now().toString(),
-        text: 'Hello! I\'m here to help you. How can I assist you today?',
-        sender: 'bot',
-        timestamp: new Date(),
-      },
-    ]);
+    setMessages([]);
   };
 
   const value: ChatbotContextType = {

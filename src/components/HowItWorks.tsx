@@ -1,5 +1,6 @@
 import React from 'react';
-import { Building2, Users, Trophy, Briefcase } from 'lucide-react';
+import { Building2, Users, Trophy, Briefcase, ArrowRight, Plus } from 'lucide-react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 const HowItWorks = () => {
   const timeline = [
@@ -32,6 +33,14 @@ const HowItWorks = () => {
       step: '04'
     }
   ];
+
+  const handleJoinPlatform = () => {
+    smoothScrollTo('problems', 80);
+  };
+
+  const handlePostProblem = () => {
+    smoothScrollTo('partner', 80);
+  };
 
   return (
     <section id="how-it-works" className="py-16 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
@@ -92,9 +101,30 @@ const HowItWorks = () => {
 
         {/* CTA */}
         <div className="text-center pt-16">
-          <button className="px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-            Join the Platform
-          </button>
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-[#002D62] mb-8">
+              Ready to Get Started?
+            </h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button 
+                onClick={handleJoinPlatform}
+                className="group px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+              >
+                <span>Join the Platform</span>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+              <button 
+                onClick={handlePostProblem}
+                className="group px-8 py-4 border-2 border-[#DAA520] text-[#DAA520] bg-white text-lg font-semibold rounded-xl hover:bg-[#DAA520] hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Post a Problem</span>
+              </button>
+            </div>
+            <p className="text-gray-600 text-sm mt-4">
+              Join as a solver to find projects • Join as a company to post challenges
+            </p>
+          </div>
         </div>
       </div>
     </section>

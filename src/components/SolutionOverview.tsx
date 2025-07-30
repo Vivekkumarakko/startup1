@@ -1,19 +1,14 @@
 import React from 'react';
-import { FileText, Code, Award, Handshake, ArrowRight } from 'lucide-react';
+import { Users, Award, Handshake, ArrowRight } from 'lucide-react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 const SolutionOverview = () => {
   const steps = [
     {
-      icon: FileText,
-      title: 'Post Real Problems',
-      description: 'Companies submit actual challenges they need solved',
+      icon: Users,
+      title: 'Solve Real Problems',
+      description: 'Work on actual challenges posted by real companies',
       color: 'bg-blue-500'
-    },
-    {
-      icon: Code,
-      title: 'Solve to Earn Tokens',
-      description: 'Talented individuals provide innovative solutions',
-      color: 'bg-[#DAA520]'
     },
     {
       icon: Award,
@@ -28,6 +23,10 @@ const SolutionOverview = () => {
       color: 'bg-purple-500'
     }
   ];
+
+  const handleGetStarted = () => {
+    smoothScrollTo('problems', 80);
+  };
 
   return (
     <section className="py-16 lg:py-24 bg-white">
@@ -106,7 +105,10 @@ const SolutionOverview = () => {
 
         {/* CTA */}
         <div className="text-center pt-12">
-          <button className="px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <button 
+            onClick={handleGetStarted}
+            className="px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
             Get Started Today
           </button>
         </div>

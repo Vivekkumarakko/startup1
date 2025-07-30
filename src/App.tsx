@@ -16,6 +16,7 @@ import Chatbot from './components/Chatbot';
 import { ChatbotProvider } from './components/ChatbotContext';
 import { AuthProvider } from './contexts/AuthContext';
 import AuthTest from './components/auth/AuthTest';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const AppContent: React.FC = () => {
   // Check if we're on the auth test route
@@ -51,9 +52,11 @@ const AppContent: React.FC = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

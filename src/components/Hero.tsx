@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Play, ArrowRight, Coins } from 'lucide-react';
+import { smoothScrollTo } from '../utils/smoothScroll';
+import VideoModal from './VideoModal';
 
 const Hero = () => {
   const [tokens, setTokens] = useState<Array<{ id: number; x: number; y: number; delay: number }>>([]);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
     // Create floating tokens animation
@@ -15,8 +18,16 @@ const Hero = () => {
     setTokens(newTokens);
   }, []);
 
+  const scrollToProblemBoard = () => {
+    smoothScrollTo('problems', 80);
+  };
+
+  const openVideoModal = () => {
+    setIsVideoModalOpen(true);
+  };
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#002D62] via-[#003A7A] to-[#004B92]">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#002D62] via-[#003A7A] to-[#004B92] pt-20">
       {/* Animated Background */}
       <div className="absolute inset-0">
         {/* Floating Tokens */}
@@ -56,11 +67,17 @@ const Hero = () => {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <button className="group px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2">
+            <button 
+              onClick={scrollToProblemBoard}
+              className="group px-8 py-4 bg-[#DAA520] text-white text-lg font-semibold rounded-xl hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+            >
               <span>Solve Now</span>
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
-            <button className="group px-8 py-4 border-2 border-white/30 text-white text-lg font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center space-x-2">
+            <button 
+              onClick={openVideoModal}
+              className="group px-8 py-4 border-2 border-white/30 text-white text-lg font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center space-x-2"
+            >
               <Play className="h-5 w-5" />
               <span>Learn How It Works</span>
             </button>
@@ -100,6 +117,12 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+      />
     </section>
   );
 };

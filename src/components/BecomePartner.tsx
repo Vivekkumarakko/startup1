@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Handshake, Users, Target, Award, TrendingUp, CheckCircle, ArrowRight, Mail, Building, User, MessageSquare } from 'lucide-react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 const BecomePartner = () => {
   const [formData, setFormData] = useState({
@@ -108,6 +109,10 @@ const BecomePartner = () => {
     e.preventDefault();
     // Handle form submission
     console.log('Form submitted:', formData);
+  };
+
+  const handleBrowseProblemBoard = () => {
+    smoothScrollTo('problems', 80);
   };
 
   return (
@@ -387,7 +392,10 @@ const BecomePartner = () => {
           <p className="text-gray-600 mb-6">
             Browse our Problem Board to see the quality of work our solvers produce
           </p>
-          <button className="px-6 py-3 bg-white border border-gray-300 text-[#002D62] font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-300 flex items-center space-x-2 mx-auto">
+          <button 
+            onClick={handleBrowseProblemBoard}
+            className="px-6 py-3 bg-white border border-gray-300 text-[#002D62] font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-300 flex items-center space-x-2 mx-auto"
+          >
             <span>Browse Problem Board</span>
             <ArrowRight className="h-4 w-4" />
           </button>

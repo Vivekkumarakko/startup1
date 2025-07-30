@@ -11,9 +11,11 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider } from '../config/firebase';
 import { trackEvents } from '../services/analyticsService';
+import { isAdmin, getCurrentAdminUser, AdminUser } from '../services/adminService';
 
 interface AuthContextType {
   currentUser: User | null;
+  currentAdmin: AdminUser | null;
   loading: boolean;
   signup: (email: string, password: string, displayName?: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
@@ -39,6 +41,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   const signup = async (email: string, password: string, displayName?: string) => {
@@ -155,16 +158,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      setLoading(false);
       
-      // Track user state change
+      // Check if user is admin
       if (user) {
-        trackEvents.setUser(user.uid, {
-          email: user.email || '',
-          display_name: user.displayName || '',
-          email_verified: user.emailVerified.toString()
-        });
+        try {
+          const adminUser = getCurrentAdminUser(user);
+          setCurrentAdmin(adminUser);
+          
+          // Track user state change
+          trackEvents.setUser(user.uid, {
+            email: user.email || '',
+            display_name: user.displayName || '',
+            email_verified: user.emailVerified.toString(),
+            is_admin: adminUser ? 'true' : 'false'
+          });
+        } catch (error) {
+          console.warn('Error checking admin status:', error);
+          setCurrentAdmin(null);
+        }
+      } else {
+        setCurrentAdmin(null);
       }
+      
+      setLoading(false);
+    }, (error) => {
+      console.warn('Auth state change error:', error);
+      setCurrentUser(null);
+      setCurrentAdmin(null);
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -172,6 +193,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value: AuthContextType = {
     currentUser,
+    currentAdmin,
     loading,
     signup,
     login,
